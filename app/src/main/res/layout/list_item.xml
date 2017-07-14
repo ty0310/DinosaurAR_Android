@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="66dp"
+    android:layout_height="66dp"
+    android:layout_margin="2dp" >
+
+    <View
+        android:id="@+id/item_background_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/icon_rounded_corners_default" />
+
+    <ImageView
+        android:id="@+id/icon_image"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
