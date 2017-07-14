@@ -19,13 +19,20 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,8 +53,14 @@ import com.kyouryu.dinosaurar_android.advertise.AdvertiseActivity;
 import com.kyouryu.dinosaurar_android.common.StringUtil;
 import com.kyouryu.dinosaurar_android.model.ListViewItemModel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Activity for the face tracker app.  This app detects faces with the rear facing camera, and draws
@@ -67,6 +80,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     private static final int RC_HANDLE_GMS = 9001;
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
+    private static final int REQUEST_WRITE_PERMISSION = 3;
 
     //==============================================================================================
     // Activity Methods
@@ -80,6 +94,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.main);
 
+        Session.getInstance().setActivity(this);
         Session.getInstance().setContext(this);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
@@ -107,6 +122,9 @@ public final class FaceTrackerActivity extends AppCompatActivity {
 
         mRecyclerViewAdapter = new RecyclerViewAdapter(this, data, new RecyclerViewAdapterListener());
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        Button shutterButton = (Button)findViewById(R.id.camera_option).findViewById(R.id.shutter_button);
+        shutterButton.setOnClickListener(new OnShutterButtonClickListener());
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -236,6 +254,12 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode != RC_HANDLE_CAMERA_PERM) {
+            Log.d(TAG, "Got unexpected permission result: " + requestCode);
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            return;
+        }
+
+        if (requestCode != REQUEST_WRITE_PERMISSION) {
             Log.d(TAG, "Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
@@ -399,5 +423,80 @@ public final class FaceTrackerActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    // シャッターボタン押下イベント
+    private class OnShutterButtonClickListener implements Button.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            if (ContextCompat.checkSelfPermission(Session.getInstance().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                // 以前に許諾して、今後表示しないとしていた場合は、ここにはこない
+                String[] permissions = new String[] {
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                };
+                ActivityCompat.requestPermissions(Session.getInstance().getActivity(), permissions, REQUEST_WRITE_PERMISSION);
+            } else {
+                //  許諾されているので、やりたいことをする
+                mCameraSource.takePicture(new OnShutterCallback(), new OnPictureCallback());
+            }
+        }
+    }
+
+    private class OnShutterCallback implements CameraSource.ShutterCallback {
+        @Override
+        public void onShutter() {
+
+        }
+    }
+
+    private class OnPictureCallback implements CameraSource.PictureCallback {
+        @Override
+        public void onPictureTaken(byte[] bytes) {
+            Bitmap bitmapPicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+            try {
+                saveBitmap(bitmapPicture);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    public void saveBitmap(Bitmap saveImage) throws IOException {
+
+        final String SAVE_DIR = "/DCIM/Camera/";
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + SAVE_DIR);
+        try{
+            Log.d("aaaa", "try file exists" + file);
+            if(!file.exists()){
+                file.mkdir();
+            }
+        }catch(SecurityException e){
+            e.printStackTrace();
+        }
+
+        Date mDate = new Date();
+        SimpleDateFormat fileNameDate = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String fileName = fileNameDate.format(mDate) + ".jpg";
+        String AttachName = file.getAbsolutePath() + "/" + fileName;
+
+        try {
+            FileOutputStream out = new FileOutputStream(AttachName);
+            saveImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        // save index
+        ContentValues values = new ContentValues();
+        ContentResolver contentResolver = getContentResolver();
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.Images.Media.TITLE, fileName);
+        values.put("_data", AttachName);
+        contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 }

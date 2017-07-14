@@ -1,5 +1,6 @@
 package com.kyouryu.dinosaurar_android;
 
+import android.app.Activity;
 import android.content.Context;
 
 /**
@@ -9,6 +10,8 @@ import android.content.Context;
 public class Session {
     private static final Session ourInstance = new Session();
 
+    private Activity activity;
+
     private Context context;
 
     public static Session getInstance() {
@@ -16,6 +19,14 @@ public class Session {
     }
 
     private Session() {
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     public Context getContext() {
