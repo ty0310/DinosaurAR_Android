@@ -27,6 +27,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -50,6 +54,7 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.advertise.AdvertiseActivity;
+import com.kyouryu.dinosaurar_android.common.ImageUtil;
 import com.kyouryu.dinosaurar_android.common.StringUtil;
 import com.kyouryu.dinosaurar_android.model.ListViewItemModel;
 
@@ -454,10 +459,30 @@ public final class FaceTrackerActivity extends AppCompatActivity {
     private class OnPictureCallback implements CameraSource.PictureCallback {
         @Override
         public void onPictureTaken(byte[] bytes) {
-            Bitmap bitmapPicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            // カメラbitmap
+            Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+            // rotate
+            int rotateAngle;
+            if (mCameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_BACK) {
+                rotateAngle = 90;
+            } else {
+                rotateAngle = -90;
+            }
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotateAngle);
+
+            Bitmap rotatedPicture = Bitmap.createBitmap(picture , 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
+
+            // オーバーレイbitmap
+            Bitmap overlay = ImageUtil.loadBitmapFromView(mGraphicOverlay);
+
+            // 合成
+            Bitmap brend = ImageUtil.blendBitmap(rotatedPicture, overlay);
 
             try {
-                saveBitmap(bitmapPicture);
+                saveBitmap(brend);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -469,7 +494,6 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         final String SAVE_DIR = "/DCIM/Camera/";
         File file = new File(Environment.getExternalStorageDirectory().getPath() + SAVE_DIR);
         try{
-            Log.d("aaaa", "try file exists" + file);
             if(!file.exists()){
                 file.mkdir();
             }
