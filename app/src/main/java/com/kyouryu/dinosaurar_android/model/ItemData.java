@@ -28,4 +28,59 @@ public class ItemData extends RealmObject {
     // AR対象フラグ
     private boolean isMarker;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFilterImageName() {
+        return filterImageName;
+    }
+
+    public void setFilterImageName(String filterImageName) {
+        this.filterImageName = filterImageName;
+    }
+
+    public String getMarkerImageName() {
+        return markerImageName;
+    }
+
+    public void setMarkerImageName(String markerImageName) {
+        this.markerImageName = markerImageName;
+    }
+
+    public String getIconImageName() {
+        return iconImageName;
+    }
+
+    public void setIconImageName(String iconImageName) {
+        this.iconImageName = iconImageName;
+    }
+
+    public String getCoverImageName() {
+        return coverImageName;
+    }
+
+    public void setCoverImageName(String coverImageName) {
+        this.coverImageName = coverImageName;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
+    public boolean isMarker() {
+        return isMarker;
+    }
+
+    public void setMarker(boolean marker) {
+        isMarker = marker;
+    }
 }
