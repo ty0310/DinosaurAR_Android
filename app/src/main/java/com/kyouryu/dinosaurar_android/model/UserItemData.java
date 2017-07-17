@@ -55,4 +55,7 @@ public class UserItemData {
         return getOpenedItems();
     }
 
+    public RealmResults<ItemData> getItemDatas() {
+        return itemDatas;
+    }
 }

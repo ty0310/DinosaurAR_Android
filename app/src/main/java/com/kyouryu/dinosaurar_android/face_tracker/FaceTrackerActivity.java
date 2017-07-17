@@ -55,7 +55,9 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.advertise.AdvertiseActivity;
+import com.kyouryu.dinosaurar_android.common.ImageUtil;
 import com.kyouryu.dinosaurar_android.common.StringUtil;
+import com.kyouryu.dinosaurar_android.model.ItemData;
 import com.kyouryu.dinosaurar_android.model.ListViewItemModel;
 import com.kyouryu.dinosaurar_android.model.UserItemData;
 
@@ -117,13 +119,14 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(manager);
 
         ArrayList<ListViewItemModel> data = new ArrayList<>();
-        data.add(new ListViewItemModel(R.drawable.cell_plus, false));
-        for (int i = 0; i < 9; i++) {
+        data.add(new ListViewItemModel("cell_plus", null, false));
+        for (int i = 0; i < userItemData.getItemDatas().size(); i++) {
+            ItemData itemData = userItemData.getItemDatas().get(i);
             boolean isSelected = false;
             if (i == 0) {
                 isSelected = true;
             }
-            data.add(new ListViewItemModel(StringUtil.getImageIdFrom("icon_" + i, getApplicationContext()), isSelected));
+            data.add(new ListViewItemModel(itemData.getIconImageName(), itemData.getFilterImageName(), isSelected));
         }
 
         mRecyclerViewAdapter = new RecyclerViewAdapter(this, data, new RecyclerViewAdapterListener());
@@ -499,7 +502,9 @@ public final class FaceTrackerActivity extends AppCompatActivity {
 
                 RectF rect = new RectF(left, top, right,bottom);
 
-                Bitmap bmp = BitmapFactory.decodeResource(Session.getInstance().getContext().getResources(), R.drawable.frame_5);
+//                Bitmap bmp = BitmapFactory.decodeResource(Session.getInstance().getContext().getResources(), R.drawable.frame_5);
+                Bitmap bmp = ImageUtil.getBitmapFromAssets(Session.getInstance().getSelectedItemData().getFrameImageName(),
+                        Session.getInstance().getContext());
                 canvas.drawBitmap(bmp, null, rect, null);
             }
 

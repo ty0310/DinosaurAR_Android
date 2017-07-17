@@ -21,10 +21,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 import com.google.android.gms.vision.face.Face;
 import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
+import com.kyouryu.dinosaurar_android.common.ImageUtil;
 
 /**
  * Graphic instance for rendering face position, orientation, and landmarks within an associated
@@ -117,9 +119,10 @@ class FaceGraphic extends GraphicOverlay.Graphic {
         float bottom = y + yOffset;
 
         RectF rect = new RectF(left, top, right,bottom);
-        Bitmap bmp = BitmapFactory.decodeResource(Session.getInstance().getContext().getResources(), R.drawable.frame_5);
-        
+
+        Bitmap bmp = ImageUtil.getBitmapFromAssets(Session.getInstance().getSelectedItemData().getFrameImageName(), Session.getInstance().getContext());
+        Log.d("aaaaaa", "iiiiii" + face.getEulerZ());
         canvas.drawBitmap(bmp, null, rect, mBoxPaint);
-//        canvas.drawRect(left, top, right, bottom, mBoxPaint);
+
     }
 }
