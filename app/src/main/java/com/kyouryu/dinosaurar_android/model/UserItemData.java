@@ -40,16 +40,19 @@ public class UserItemData {
     private RealmResults<ItemData> saveDefaultinitialData() {
         Log.d("aaaaaa", "aaaaaaa saveDefaultinitialData()");
         Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
         for (ItemComponent.Frame item : ItemComponent.allValues) {
-            Log.d("aaaaaaa", "aaaaaaaa" + item.id);
-            Log.d("aaaaaaa", "aaaaaaaa" + item.filterImageName);
-            Log.d("aaaaaaa", "aaaaaaaa" + item.markerImageName);
-            Log.d("aaaaaaa", "aaaaaaaa" + item.coverImageName);
-            Log.d("aaaaaaa", "aaaaaaaa" + item.iconImageName);
-            Log.d("aaaaaaa", "aaaaaaaa" + item.isDefaultOpen);
-            Log.d("aaaaaaa", "aaaaaaaa" + item.isMarker);
+            ItemData itemData = realm.createObject(ItemData.class);
+            itemData.setId(item.id);
+            itemData.setFilterImageName(item.filterImageName);
+            itemData.setMarkerImageName(item.markerImageName);
+            itemData.setCoverImageName(item.coverImageName);
+            itemData.setIconImageName(item.iconImageName);
+            itemData.setOpen(item.isDefaultOpen);
+            itemData.setMarker(item.isMarker);
         }
-        return null;
+        realm.commitTransaction();
+        return getOpenedItems();
     }
 
 }
