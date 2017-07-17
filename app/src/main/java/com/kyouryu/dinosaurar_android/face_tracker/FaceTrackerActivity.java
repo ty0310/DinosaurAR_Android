@@ -30,7 +30,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,12 +43,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseArray;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
@@ -55,6 +62,7 @@ import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.advertise.AdvertiseActivity;
 import com.kyouryu.dinosaurar_android.common.ImageUtil;
+import com.kyouryu.dinosaurar_android.common.SizeUtil;
 import com.kyouryu.dinosaurar_android.common.StringUtil;
 import com.kyouryu.dinosaurar_android.model.ListViewItemModel;
 
@@ -462,27 +470,49 @@ public final class FaceTrackerActivity extends AppCompatActivity {
             // カメラbitmap
             Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-            // rotate
+            // 内側カメラ、外側カメラによってrotateがずれるのを修正
             int rotateAngle;
             if (mCameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_BACK) {
                 rotateAngle = 90;
             } else {
                 rotateAngle = -90;
             }
-
             Matrix matrix = new Matrix();
             matrix.postRotate(rotateAngle);
 
             Bitmap rotatedPicture = Bitmap.createBitmap(picture , 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
 
-            // オーバーレイbitmap
-            Bitmap overlay = ImageUtil.loadBitmapFromView(mGraphicOverlay);
+            // 顔認識
+            FaceDetector detector = new FaceDetector.Builder(Session.getInstance().getContext())
+                    .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+                    .build();
+            Frame frame = new Frame.Builder().setBitmap(rotatedPicture).build();
 
-            // 合成
-            Bitmap brend = ImageUtil.blendBitmap(rotatedPicture, overlay);
+            SparseArray<Face> faces = detector.detect(frame);
+            Bitmap result = Bitmap.createBitmap(rotatedPicture.getWidth(), rotatedPicture.getHeight(), rotatedPicture.getConfig());
+            Canvas canvas = new Canvas(result);
+            canvas.drawBitmap(rotatedPicture, null, new RectF(0, 0, rotatedPicture.getWidth(), rotatedPicture.getHeight()), null);
+            for (int i = 0; i < faces.size(); i++) {
+                Face face = faces.valueAt(i);
+                float x = face.getPosition().x + face.getWidth() / 2;
+                float y = face.getPosition().y + face.getHeight() / 2;
+
+                // Draws a bounding box around the face.
+                float xOffset = face.getWidth() / 2.0f;
+                float yOffset = face.getHeight() / 2.0f;
+                float left = x - xOffset;
+                float top = y - yOffset;
+                float right = x + xOffset;
+                float bottom = y + yOffset;
+
+                RectF rect = new RectF(left, top, right,bottom);
+
+                Bitmap bmp = BitmapFactory.decodeResource(Session.getInstance().getContext().getResources(), R.drawable.frame_5);
+                canvas.drawBitmap(bmp, null, rect, null);
+            }
 
             try {
-                saveBitmap(brend);
+                saveBitmap(result);
             } catch (IOException e) {
                 e.printStackTrace();
             }
