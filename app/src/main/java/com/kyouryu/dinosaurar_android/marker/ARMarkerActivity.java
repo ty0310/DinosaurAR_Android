@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.kyouryu.dinosaurar_android.R;
+import com.kyouryu.dinosaurar_android.model.ItemData;
+import com.kyouryu.dinosaurar_android.model.UserItemData;
 
 import eu.kudan.kudan.ARAPIKey;
 import eu.kudan.kudan.ARActivity;
@@ -22,8 +24,6 @@ public class ARMarkerActivity extends ARActivity {
 
     private boolean canTapScreen = false;
 
-    private View mOverlay;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +31,8 @@ public class ARMarkerActivity extends ARActivity {
         key.setAPIKey(getString(R.string.kudan_api_key));
 
         setContentView(R.layout.ar_markar);
+
+
     }
 
     @Override
@@ -40,18 +42,18 @@ public class ARMarkerActivity extends ARActivity {
         ARImageTracker imageTracker = ARImageTracker.getInstance();
         imageTracker.initialise();
 
-        for (int i = 9; i <= 22; i++) {
-            ARImageTrackable trackable = new ARImageTrackable("ar_" + i);
-            trackable.loadFromAsset("marker_" + i + ".png");
+        for (int i = 0; i < UserItemData.getARMarkers().size(); i++) {
+            ItemData itemData = UserItemData.getARMarkers().get(i);
+
+            ARImageTrackable trackable = new ARImageTrackable("" + itemData.getId());
+            trackable.loadFromAsset(itemData.getMarkerImageName() + ".png");
 
             trackable.addListener(new OnImageDetectListener());
 
             imageTracker.addTrackable(trackable);
 
-            ARImageNode imageNode = new ARImageNode("cover_" + i + ".png");
+            ARImageNode imageNode = new ARImageNode(itemData.getCoverImageName() + ".png");
             trackable.getWorld().addChild(imageNode);
-
-
         }
     }
 
@@ -60,6 +62,8 @@ public class ARMarkerActivity extends ARActivity {
         public void didDetect(ARImageTrackable arImageTrackable) {
             Log.d("aaaaa", "aaaaaaa" + arImageTrackable.getName());
             Log.d("aaaaa", "aaaaa" + arImageTrackable.getWorld().getPosition());
+
+            canTapScreen = true;
         }
 
         @Override
@@ -68,6 +72,7 @@ public class ARMarkerActivity extends ARActivity {
 
         @Override
         public void didLose(ARImageTrackable arImageTrackable) {
+            canTapScreen = false;
         }
     }
 }
