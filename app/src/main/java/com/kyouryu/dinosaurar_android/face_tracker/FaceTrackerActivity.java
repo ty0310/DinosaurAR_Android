@@ -27,11 +27,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
@@ -44,10 +41,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Display;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -61,16 +55,13 @@ import com.google.android.gms.vision.face.FaceDetector;
 import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.advertise.AdvertiseActivity;
-import com.kyouryu.dinosaurar_android.common.ImageUtil;
-import com.kyouryu.dinosaurar_android.common.SizeUtil;
 import com.kyouryu.dinosaurar_android.common.StringUtil;
 import com.kyouryu.dinosaurar_android.model.ListViewItemModel;
+import com.kyouryu.dinosaurar_android.model.UserItemData;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,6 +72,8 @@ import java.util.Date;
  */
 public final class FaceTrackerActivity extends AppCompatActivity {
     private static final String TAG = "FaceTracker";
+
+    private UserItemData userItemData = new UserItemData();
 
     private CameraSource mCameraSource = null;
 
@@ -497,7 +490,6 @@ public final class FaceTrackerActivity extends AppCompatActivity {
                 float x = face.getPosition().x + face.getWidth() / 2;
                 float y = face.getPosition().y + face.getHeight() / 2;
 
-                // Draws a bounding box around the face.
                 float xOffset = face.getWidth() / 2.0f;
                 float yOffset = face.getHeight() / 2.0f;
                 float left = x - xOffset;
