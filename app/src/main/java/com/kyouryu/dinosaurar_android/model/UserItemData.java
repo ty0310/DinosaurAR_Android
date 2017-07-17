@@ -55,6 +55,13 @@ public class UserItemData {
         return getOpenedItems();
     }
 
+    public static RealmResults<ItemData> getARMarkers() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<ItemData> result = realm.where(ItemData.class).equalTo("isMarker", true).findAll();
+        Log.d("aaaaaa", "aaaaaaa result size:" + result.size());
+        return result;
+    }
+
     public RealmResults<ItemData> getItemDatas() {
         return itemDatas;
     }
