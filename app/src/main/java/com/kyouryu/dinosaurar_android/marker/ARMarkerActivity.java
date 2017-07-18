@@ -2,6 +2,7 @@ package com.kyouryu.dinosaurar_android.marker;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
+import com.kyouryu.dinosaurar_android.face_tracker.FaceTrackerActivity;
 import com.kyouryu.dinosaurar_android.model.ItemData;
 import com.kyouryu.dinosaurar_android.model.UserItemData;
 
@@ -112,8 +114,14 @@ public class ARMarkerActivity extends ARActivity {
                         .setNegativeButton(getString(R.string.ar_dialog_cancel), null)
                         .show();
             } else {
-                Log.d("aaaaaaaaa", "aaaaaaaaa み解放");
+                // 未解放の場合
                 UserItemData.openFilter(trackableId);
+
+                // 最初の画面へ戻る
+                Intent intent = new Intent(ARMarkerActivity.this, FaceTrackerActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
             }
         }
     };

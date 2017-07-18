@@ -75,7 +75,7 @@ import java.util.Date;
 public final class FaceTrackerActivity extends AppCompatActivity {
     private static final String TAG = "FaceTracker";
 
-    private UserItemData userItemData = new UserItemData();
+    private UserItemData userItemData;
 
     private CameraSource mCameraSource = null;
 
@@ -112,26 +112,6 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         // カメラ切り替えボタン設定
         Button reloadButton = (Button)findViewById(R.id.camera_option).findViewById(R.id.reload_button);
         reloadButton.setOnClickListener(new reloadButtonClickListener());
-
-        // 画像選択List設定
-        mRecyclerView = (RecyclerView)findViewById(R.id.camera_option).findViewById(R.id.recycler_view);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(manager);
-
-        ArrayList<ListViewItemModel> data = new ArrayList<>();
-        data.add(new ListViewItemModel("cell_plus", null, false));
-        for (int i = 0; i < userItemData.getItemDatas().size(); i++) {
-            ItemData itemData = userItemData.getItemDatas().get(i);
-            boolean isSelected = false;
-            if (i == 0) {
-                isSelected = true;
-            }
-            data.add(new ListViewItemModel(itemData.getIconImageName(), itemData.getFilterImageName(), isSelected));
-        }
-
-        mRecyclerViewAdapter = new RecyclerViewAdapter(this, data, new RecyclerViewAdapterListener());
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         Button shutterButton = (Button)findViewById(R.id.camera_option).findViewById(R.id.shutter_button);
         shutterButton.setOnClickListener(new OnShutterButtonClickListener());
@@ -222,6 +202,29 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         super.onResume();
 
         startCameraSource();
+
+        userItemData = new UserItemData();
+
+        // データの更新
+        // 画像選択List設定
+        mRecyclerView = (RecyclerView)findViewById(R.id.camera_option).findViewById(R.id.recycler_view);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(manager);
+
+        ArrayList<ListViewItemModel> data = new ArrayList<>();
+        data.add(new ListViewItemModel("cell_plus", null, false));
+        for (int i = 0; i < userItemData.getItemDatas().size(); i++) {
+            ItemData itemData = userItemData.getItemDatas().get(i);
+            boolean isSelected = false;
+            if (i == 0) {
+                isSelected = true;
+            }
+            data.add(new ListViewItemModel(itemData.getIconImageName(), itemData.getFilterImageName(), isSelected));
+        }
+
+        mRecyclerViewAdapter = new RecyclerViewAdapter(this, data, new RecyclerViewAdapterListener());
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
     }
 
     /**
