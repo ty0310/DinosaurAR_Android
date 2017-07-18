@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
+import com.kyouryu.dinosaurar_android.face_tracker.FaceTrackerActivity;
 import com.kyouryu.dinosaurar_android.marker.ARMarkerActivity;
 
 /**
@@ -33,9 +34,14 @@ public class AdvertiseActivity extends AppCompatActivity {
         advertiseWebView.setWebViewClient(new WebViewClient());
         advertiseWebView.loadUrl(getString(R.string.ad_url));
 
-        // ボタンの設定
+        // ARマーカー画面へ遷移ボタンの設定
         Button toMarkerButton = (Button)findViewById(R.id.to_marker_button);
         toMarkerButton.setOnClickListener(new OnMarkerButtonClickListener());
+
+        // 閉じるボタンの設定
+        Button closeButton = (Button)findViewById(R.id.ad_close_button);
+        closeButton.setOnClickListener(new OnCloseButtonClickListener());
+
     }
 
     private class OnMarkerButtonClickListener implements Button.OnClickListener {
@@ -45,5 +51,20 @@ public class AdvertiseActivity extends AppCompatActivity {
             Intent intent = new Intent(AdvertiseActivity.this, ARMarkerActivity.class);
             startActivity(intent);
         }
+    }
+
+    private class OnCloseButtonClickListener implements Button.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            closeActivity();
+        }
+    }
+
+    private void closeActivity() {
+        // 最初の画面へ戻る
+        Intent intent = new Intent(AdvertiseActivity.this, FaceTrackerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
     }
 }

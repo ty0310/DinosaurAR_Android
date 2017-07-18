@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.kyouryu.dinosaurar_android.R;
@@ -45,6 +46,9 @@ public class ARMarkerActivity extends ARActivity {
 
         ImageView cameraFrame = (ImageView)findViewById(R.id.camera_frame);
         cameraFrame.setOnClickListener(new OnCameraFrameClickListener());
+
+        Button closeButton = (Button)findViewById(R.id.ar_close_button);
+        closeButton.setOnClickListener(new OnCloseButtonClickListener());
     }
 
     @Override
@@ -118,11 +122,23 @@ public class ARMarkerActivity extends ARActivity {
                 UserItemData.openFilter(trackableId);
 
                 // 最初の画面へ戻る
-                Intent intent = new Intent(ARMarkerActivity.this, FaceTrackerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                closeActivity();
             }
         }
     };
+
+    private class OnCloseButtonClickListener implements Button.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            closeActivity();
+        }
+    }
+
+    private void closeActivity() {
+        // 最初の画面へ戻る
+        Intent intent = new Intent(ARMarkerActivity.this, FaceTrackerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+    }
 }
