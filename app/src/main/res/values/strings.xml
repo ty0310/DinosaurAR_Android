@@ -9,6 +9,9 @@
     <string name="ar_dialog_message">No.%1$s追加しますか？</string>
     <string name="ar_dialog_ok">フィルター追加</string>
     <string name="ar_dialog_cancel">キャンセル</string>
+    <string name="ar_dialog_title_already">取得済み</string>
+    <string name="ar_dialog_message_already">撮影画像で利用できます。</string>
+    <string name="ar_dialog_cancel_already">戻る</string>
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>

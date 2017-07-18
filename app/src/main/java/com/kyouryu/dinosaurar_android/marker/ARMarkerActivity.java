@@ -106,7 +106,11 @@ public class ARMarkerActivity extends ARActivity {
         public void onClick(DialogInterface dialog, int id) {
             if (UserItemData.isOpenItem(trackableId)){
                 // 解放済みの場合
-                Log.d("aaaaaaaaa", "aaaaaaaaa 解放済み");
+                new AlertDialog.Builder(Session.getInstance().getActivity())
+                        .setTitle(getString(R.string.ar_dialog_title_already))
+                        .setMessage(getString(R.string.ar_dialog_message_already))
+                        .setNegativeButton(getString(R.string.ar_dialog_cancel), null)
+                        .show();
             } else {
                 Log.d("aaaaaaaaa", "aaaaaaaaa み解放");
                 UserItemData.openFilter(trackableId);
