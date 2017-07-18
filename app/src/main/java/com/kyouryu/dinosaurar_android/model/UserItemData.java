@@ -20,12 +20,9 @@ public class UserItemData {
     }
 
     private RealmResults<ItemData> getDefaultItemData() {
-        Log.d("aaaaaaa", "aaaaaaaa getDefaultItemData");
         if (getOpenedItems().size() == 0) {
-            Log.d("aaaaaaa", "aaaaaaaa getOpenedItems().length == 0");
             return saveDefaultinitialData();
         }
-        Log.d("aaaaaaa", "aaaaaaaa getOpenedItems().length != 0");
         return getOpenedItems();
 
     }
@@ -33,12 +30,10 @@ public class UserItemData {
     private RealmResults<ItemData> getOpenedItems() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<ItemData> result = realm.where(ItemData.class).equalTo("isOpen", true).findAll();
-        Log.d("aaaaaa", "aaaaaaa result size:" + result.size());
         return result;
     }
 
     private RealmResults<ItemData> saveDefaultinitialData() {
-        Log.d("aaaaaa", "aaaaaaa saveDefaultinitialData()");
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         for (ItemComponent.Frame item : ItemComponent.allValues) {
@@ -58,8 +53,24 @@ public class UserItemData {
     public static RealmResults<ItemData> getARMarkers() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<ItemData> result = realm.where(ItemData.class).equalTo("isMarker", true).findAll();
-        Log.d("aaaaaa", "aaaaaaa result size:" + result.size());
         return result;
+    }
+
+    public static void openFilter(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        ItemData result = realm.where(ItemData.class).equalTo("id", id).findFirst();
+        realm.beginTransaction();
+        result.setOpen(true);
+        realm.commitTransaction();
+    }
+
+    public static boolean isOpenItem(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        ItemData result = realm.where(ItemData.class).equalTo("id", id).findFirst();
+        if (result.isOpen()) {
+            return true;
+        }
+        return false;
     }
 
     public RealmResults<ItemData> getItemDatas() {

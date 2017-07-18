@@ -1,11 +1,15 @@
 package com.kyouryu.dinosaurar_android.marker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.kyouryu.dinosaurar_android.R;
+import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.model.ItemData;
 import com.kyouryu.dinosaurar_android.model.UserItemData;
 
@@ -24,15 +28,21 @@ public class ARMarkerActivity extends ARActivity {
 
     private boolean canTapScreen = false;
 
+    private String trackableId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARAPIKey key = ARAPIKey.getInstance();
         key.setAPIKey(getString(R.string.kudan_api_key));
 
+        Session.getInstance().setActivity(this);
+        Session.getInstance().setContext(this);
+
         setContentView(R.layout.ar_markar);
 
-
+        ImageView cameraFrame = (ImageView)findViewById(R.id.camera_frame);
+        cameraFrame.setOnClickListener(new OnCameraFrameClickListener());
     }
 
     @Override
@@ -60,10 +70,8 @@ public class ARMarkerActivity extends ARActivity {
     private class OnImageDetectListener implements ARImageTrackableListener {
         @Override
         public void didDetect(ARImageTrackable arImageTrackable) {
-            Log.d("aaaaa", "aaaaaaa" + arImageTrackable.getName());
-            Log.d("aaaaa", "aaaaa" + arImageTrackable.getWorld().getPosition());
-
             canTapScreen = true;
+            trackableId = arImageTrackable.getName();
         }
 
         @Override
@@ -75,4 +83,34 @@ public class ARMarkerActivity extends ARActivity {
             canTapScreen = false;
         }
     }
+
+    private class OnCameraFrameClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (!canTapScreen) {
+                return;
+            }
+
+            new AlertDialog.Builder(Session.getInstance().getActivity())
+                    .setTitle(getString(R.string.ar_dialog_title))
+                    .setMessage(getString(R.string.ar_dialog_message, trackableId))
+                    .setPositiveButton(getString(R.string.ar_dialog_ok), okListener)
+                    .setNegativeButton(getString(R.string.ar_dialog_cancel), null)
+                    .show();
+
+
+        }
+    }
+
+    private DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            if (UserItemData.isOpenItem(trackableId)){
+                // 解放済みの場合
+                Log.d("aaaaaaaaa", "aaaaaaaaa 解放済み");
+            } else {
+                Log.d("aaaaaaaaa", "aaaaaaaaa み解放");
+                UserItemData.openFilter(trackableId);
+            }
+        }
+    };
 }

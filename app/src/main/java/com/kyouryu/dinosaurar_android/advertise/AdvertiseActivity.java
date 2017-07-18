@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.kyouryu.dinosaurar_android.R;
+import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.marker.ARMarkerActivity;
 
 /**
@@ -20,6 +21,10 @@ public class AdvertiseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Session.getInstance().setActivity(this);
+        Session.getInstance().setContext(this);
+
         setContentView(R.layout.advertise);
 
         // webViewの設定
