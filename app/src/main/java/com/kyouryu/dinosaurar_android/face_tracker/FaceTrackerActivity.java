@@ -266,17 +266,18 @@ public final class FaceTrackerActivity extends AppCompatActivity {
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != RC_HANDLE_CAMERA_PERM) {
-            Log.d(TAG, "Got unexpected permission result: " + requestCode);
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            return;
-        }
-
-        if (requestCode != REQUEST_WRITE_PERMISSION) {
-            Log.d(TAG, "Got unexpected permission result: " + requestCode);
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            return;
-        }
+//        if (requestCode != RC_HANDLE_CAMERA_PERM) {
+//            Log.d(TAG, "Got unexpected permission result: " + requestCode);
+//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//            return;
+//        }
+//
+//        if (requestCode != REQUEST_WRITE_PERMISSION) {
+//            Log.d(TAG, "aaaaaGot unexpected permission result: " + requestCode);
+//            Log.d(TAG, "Got unexpected permission result: " + requestCode);
+//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//            return;
+//        }
 
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
@@ -295,7 +296,7 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Face Tracker sample")
+        builder.setTitle("カメラへのアクセス")
                 .setMessage(R.string.no_camera_permission)
                 .setPositiveButton(R.string.ok, listener)
                 .show();
