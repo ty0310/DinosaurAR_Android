@@ -498,8 +498,8 @@ public final class FaceTrackerActivity extends AppCompatActivity {
                 float x = face.getPosition().x + face.getWidth() / 2;
                 float y = face.getPosition().y + face.getHeight() / 2;
 
-                float xOffset = face.getWidth() / 2.0f;
-                float yOffset = face.getHeight() / 2.0f;
+                float xOffset = face.getWidth() / 1.5f;
+                float yOffset = face.getHeight() / 1.5f;
                 float left = x - xOffset;
                 float top = y - yOffset;
                 float right = x + xOffset;
