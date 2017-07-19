@@ -121,7 +121,6 @@ class FaceGraphic extends GraphicOverlay.Graphic {
         RectF rect = new RectF(left, top, right,bottom);
 
         Bitmap bmp = ImageUtil.getBitmapFromAssets(Session.getInstance().getSelectedItemData().getFrameImageName(), Session.getInstance().getContext());
-        Log.d("aaaaaa", "iiiiii" + face.getEulerZ());
         canvas.drawBitmap(bmp, null, rect, mBoxPaint);
 
     }

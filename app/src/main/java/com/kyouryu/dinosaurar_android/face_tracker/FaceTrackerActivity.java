@@ -266,18 +266,6 @@ public final class FaceTrackerActivity extends AppCompatActivity {
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (requestCode != RC_HANDLE_CAMERA_PERM) {
-//            Log.d(TAG, "Got unexpected permission result: " + requestCode);
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//            return;
-//        }
-//
-//        if (requestCode != REQUEST_WRITE_PERMISSION) {
-//            Log.d(TAG, "aaaaaGot unexpected permission result: " + requestCode);
-//            Log.d(TAG, "Got unexpected permission result: " + requestCode);
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//            return;
-//        }
 
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
@@ -376,9 +364,6 @@ public final class FaceTrackerActivity extends AppCompatActivity {
         public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
             mOverlay.add(mFaceGraphic);
             mFaceGraphic.updateFace(face);
-
-            Log.d("aaaaaa", "previewの大きさ  横 : " + mPreview.getWidth() + " たて :" + mPreview.getHeight());
-            Log.d("aaaaaa", "mGraphicOverlayの大きさ  横 : " + mGraphicOverlay.getWidth() + " たて :" + mGraphicOverlay.getHeight());
         }
 
         /**
