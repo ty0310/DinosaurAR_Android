@@ -28,6 +28,8 @@ public class ItemData extends RealmObject {
     // AR対象フラグ
     private boolean isMarker;
 
+    private boolean isPositionUp;
+
     public String getId() {
         return id;
     }
@@ -82,5 +84,13 @@ public class ItemData extends RealmObject {
 
     public void setMarker(boolean marker) {
         isMarker = marker;
+    }
+
+    public boolean isPositionUp() {
+        return isPositionUp;
+    }
+
+    public void setPositionUp(boolean positionUp) {
+        isPositionUp = positionUp;
     }
 }

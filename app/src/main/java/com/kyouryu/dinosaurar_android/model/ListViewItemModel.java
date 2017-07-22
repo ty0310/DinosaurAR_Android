@@ -11,6 +11,7 @@ public class ListViewItemModel {
     // 表示画像名
     private String frameImageName;
     private boolean isSelected;
+    private boolean isPositionUp;
 
     public ListViewItemModel(String iconImageName, String frameImageName, boolean isSelected) {
         this.iconImageName = iconImageName;
@@ -32,5 +33,13 @@ public class ListViewItemModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isPositionUp() {
+        return isPositionUp;
+    }
+
+    public void setPositionUp(boolean positionUp) {
+        isPositionUp = positionUp;
     }
 }

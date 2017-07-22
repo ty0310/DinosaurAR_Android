@@ -51,6 +51,8 @@ public class ItemComponent {
 
         public boolean isMarker = this.ordinal() > 8 ? true : false;
 
+        public boolean isPositionUp = this.ordinal() == 3 || this.ordinal() == 4 || this.ordinal() == 9 || this.ordinal() == 10 ? true : false;
+
     }
 
     public static Frame[] allValues = Frame.values();

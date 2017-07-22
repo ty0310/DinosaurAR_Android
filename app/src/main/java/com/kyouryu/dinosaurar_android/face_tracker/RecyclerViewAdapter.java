@@ -2,6 +2,7 @@ package com.kyouryu.dinosaurar_android.face_tracker;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.kyouryu.dinosaurar_android.R;
 import com.kyouryu.dinosaurar_android.Session;
 import com.kyouryu.dinosaurar_android.common.ImageUtil;
 import com.kyouryu.dinosaurar_android.model.ListViewItemModel;
+import com.kyouryu.dinosaurar_android.model.UserItemData;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // 選択されたアイコン設定
         if (mData.get(position).isSelected()) {
             holder.backgroundView.setBackgroundResource(R.drawable.icon_rounded_corners_selected);
+            mData.get(position).setPositionUp(UserItemData.isPositionUp("" + (position - 1)));
             Session.getInstance().setSelectedItemData(mData.get(position));
         } else {
             holder.backgroundView.setBackgroundResource(R.drawable.icon_rounded_corners_default);

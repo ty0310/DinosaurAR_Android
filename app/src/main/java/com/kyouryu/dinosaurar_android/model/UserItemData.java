@@ -45,6 +45,7 @@ public class UserItemData {
             itemData.setIconImageName(item.iconImageName);
             itemData.setOpen(item.isDefaultOpen);
             itemData.setMarker(item.isMarker);
+            itemData.setPositionUp(item.isPositionUp);
         }
         realm.commitTransaction();
         return getOpenedItems();
@@ -68,6 +69,15 @@ public class UserItemData {
         Realm realm = Realm.getDefaultInstance();
         ItemData result = realm.where(ItemData.class).equalTo("id", id).findFirst();
         if (result.isOpen()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isPositionUp(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        ItemData result = realm.where(ItemData.class).equalTo("id", id).findFirst();
+        if (result.isPositionUp()) {
             return true;
         }
         return false;

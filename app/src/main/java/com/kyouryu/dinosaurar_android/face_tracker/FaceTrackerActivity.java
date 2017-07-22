@@ -481,10 +481,15 @@ public final class FaceTrackerActivity extends AppCompatActivity {
             for (int i = 0; i < faces.size(); i++) {
                 Face face = faces.valueAt(i);
                 float x = face.getPosition().x + face.getWidth() / 2;
-                float y = face.getPosition().y + face.getHeight() / 2;
+                // 指定された画像のみポジション設定
+                float centerYRatio = 2.0f;
+                if (Session.getInstance().getSelectedItemData().isPositionUp()) {
+                    centerYRatio = 2.7f;
+                }
+                float y = face.getPosition().y + face.getHeight() / centerYRatio;
 
-                float xOffset = face.getWidth() / 1.5f;
-                float yOffset = face.getHeight() / 1.5f;
+                float xOffset = face.getWidth() / 1.3f;
+                float yOffset = face.getHeight() / 1.3f;
                 float left = x - xOffset;
                 float top = y - yOffset;
                 float right = x + xOffset;
