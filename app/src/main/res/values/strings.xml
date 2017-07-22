@@ -1,7 +1,7 @@
 <resources>
     <string name="app_label">恐竜系AR</string>
     <string name="app_name">DinosaurAR_Android</string>
-    <string name="ad_url">http://mega2017.jp</string>
+    <string name="ad_url">https://s3-ap-northeast-1.amazonaws.com/ar-kyouryu/index.html</string>
     <string name="kudan_api_key">cil+eEmCQ2I21ccuzkHl6P2WHu91eEKCpSoroMPIt2QtEoGKRPW74iFOhEzFXQCD/huD9kwv3PD8qnGXRtIH16rOGSmdHT+F5IFQ6DCqhGJ5lL/JCAgQHxKzieGzvdP/7kj+m+FIEAZ8PQObnOlDzMfVSNlCSCM1kKN751NG10K/KLe/ZZ7UG5/41TthZZKGxtK3KeWX2QSUkRBDPit4tnc8AKB/m4cf8MGJW7M1smjF5GJgPCyy+BmeRw1FGVpQTjJnMuUZfwA3UXZunY5a7QlMWPYAqqD1iKhEIM8ZJPEf20Asw6mmXLD0N2nKBcGjPhU3I/z4rBl3Cd6v+/qdJA1hhQ9tcqDFR91FW/ep+oT6yzLoK+kyhfaPRsAv1e4CgCtLUCV2crCjXOa25fLKCUvuwrINfDlENh1hXVtv7VMaUYX9HgnDPNRPEw/avQ9wsRYeLcX15YqezRtIDComilWZ/V4DGqqQ6KfpYIk2eSaHHzJ70myX1JdGPtiYugkE93yAsI1sPm6rHv4S3wdL0RptMWk3tU4nJcfgXFKFl9xXW7qxYWpXHCJb9NvUe6GqZwnLsAH8/2+gZQPeRKYgd75tVK0DRIojfnepCp9evy20Hj/Hzkx/VchL+S+pruQeupMR6V2sBjV2qLqRa2WMDuW9imViry+uw+pUI3vCe/A=</string>
     <string name="ar_text_1">ARマーカーを枠に合わせてください。\n表示されたフレームをタップすると\nフレームが獲得できます。</string>
     <string name="ar_text_2">うまくいかない時はスタッフの人に\n聞いてね！</string>
